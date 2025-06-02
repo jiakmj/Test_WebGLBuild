@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- 뷰포트 메타 태그를 추가하여 모바일에서도 올바르게 동작하도록 함 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
+    <title>Unity Web Player | Match3</title>
+    <style>
+        /* html, body의 기본 마진 및 패딩 제거하고 전체 크기를 사용 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #231F20; /* 캔버스 배경색과 동일하게 설정 */
+            overflow: hidden;
+        }
+        /* 캔버스가 브라우저 전체 크기를 차지하도록 지정 */
+        #unity-canvas {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="unity-container" class="unity-desktop">
+        <!-- canvas의 width, height 속성는 원본 렌더 해상도를 정의하는데 사용되고, CSS로 크기를 반응형으로 조정합니다. -->
+        <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
+        <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full"></div>
+            </div>
+        </div>
+        <div id="unity-warning"> </div>
+        <div id="unity-footer">
+            <div id="unity-logo-title-footer"></div>
+            <div id="unity-fullscreen-button"></div>
+            <div id="unity-build-title">2DFishingProject</div>
+        </div>
+    </div>
+    <script src="Build/Match3Builds.loader.js"></script>
+    <script>
+        // 모든 기기에서 반응형 동작을 위해 resize 이벤트 핸들러 추가
+        function resizeCanvas() {
+            var canvas = document.querySelector("#unity-canvas");
+            // CSS로 100vw, 100vh를 지정하면 DOM 상 크기는 자동 맞춰지지만,
+            // 실제 렌더링 해상도(canvas.width, canvas.height)도 창 크기에 맞추려면 아래와 같이 갱신할 수 있습니다.
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        // 창 크기가 변경될 때마다 캔버스 크기를 업데이트
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('load', resizeCanvas);
+
+        // 모바일 기기일 경우 추가 스타일 설정 (필요 시)
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            document.body.style.textAlign = "left";
+        }
+
+        // Unity 인스턴스를 생성합니다.
+        createUnityInstance(document.querySelector("#unity-canvas"), {
+            arguments: [],
+            dataUrl: "Build/Match3Builds.data.unityweb",
+            frameworkUrl: "Build/Match3Builds.framework.js.unityweb",
+            codeUrl: "Build/Match3Builds.wasm.unityweb",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "UnityBootcamp13",
+            productName: "Match3",
+            productVersion: "0.1.0"
+            // 필요한 경우 matchWebGLToCanvasSize, devicePixelRatio 등의 옵션을 추가할 수 있습니다.
+        });
+    </script>
+    </body >
+</html >
